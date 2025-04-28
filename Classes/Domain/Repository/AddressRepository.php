@@ -84,7 +84,7 @@ class AddressRepository extends Repository
                 $queryBuilder->expr()->in('uid', $ids)
             );
 
-        $queryResult = $queryBuilder->execute()->fetchAll();
+        $queryResult = $queryBuilder->executeQuery()->fetchAllAssociative();
 
         $uids = array_column($queryResult, 'uid');
         $queryResult = array_combine($uids, $queryResult);
@@ -125,7 +125,7 @@ class AddressRepository extends Repository
                 $queryBuilder->expr()->in('uid', $ids)
             );
 
-        $queryResult = $queryBuilder->execute()->fetchAll();
+        $queryResult = $queryBuilder->executeQuery()->fetchAllAssociative();
 
         $uids = array_column($queryResult, 'uid');
         $queryResult = array_combine($uids, $queryResult);
@@ -165,7 +165,8 @@ class AddressRepository extends Repository
             ->where(
                 $queryBuilder->expr()->in($type, $ids)
             )
-            ->execute()->fetchAll();
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $uids = array_column($queryResult, 'uid');
         $queryResult = array_combine($uids, $queryResult);
@@ -181,13 +182,14 @@ class AddressRepository extends Repository
             ->select('uid', 'uid_foreign')
             ->from('sys_file_reference')
             ->where(
-                $queryBuilder->expr()->andX(
+                $queryBuilder->expr()->and(
                     $queryBuilder->expr()->eq('tablenames', $queryBuilder->createNamedParameter($tableName)),
                     $queryBuilder->expr()->eq('fieldname', $queryBuilder->createNamedParameter($fieldName)),
                     $queryBuilder->expr()->in('uid_foreign', $ids)
                 )
             )
-            ->execute()->fetchAll();
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $uids = array_column($queryResult, 'uid_foreign');
         $queryResult = array_combine($uids, $queryResult);
@@ -203,13 +205,14 @@ class AddressRepository extends Repository
             ->select('uid_local', 'uid_foreign')
             ->from('sys_category_record_mm')
             ->where(
-                $queryBuilder->expr()->andX(
+                $queryBuilder->expr()->and(
                     $queryBuilder->expr()->eq('tablenames', $queryBuilder->createNamedParameter($tableName)),
                     $queryBuilder->expr()->eq('fieldname', $queryBuilder->createNamedParameter($fieldName)),
                     $queryBuilder->expr()->in('uid_foreign', $ids)
                 )
             )
-            ->execute()->fetchAll();
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $uids = array_column($queryResult, 'uid_foreign');
         $queryResult = array_combine($uids, $queryResult);
@@ -225,7 +228,7 @@ class AddressRepository extends Repository
             ->select('tx_contacts_domain_model_address.*')
             ->from('tx_contacts_domain_model_address')
             ->where(
-                $queryBuilder->expr()->andX(
+                $queryBuilder->expr()->and(
                     $queryBuilder->expr()->neq('lat', 0.0),
                     $queryBuilder->expr()->neq('lon', 0.0)
                 )
@@ -254,7 +257,7 @@ class AddressRepository extends Repository
             $queryBuilder->orderBy($addressSearch->getFallbackOrderBy());
         }
 
-        $addresses = $queryBuilder->execute()->fetchAll();
+        $addresses = $queryBuilder->executeQuery()->fetchAllAssociative();
 
         if ($addressSearch->getLat() !== 0.0 && $addressSearch->getLon() !== 0.0 && $addressSearch->getRadius() !== 0) {
             $addressesInDistance = [];
@@ -290,8 +293,8 @@ class AddressRepository extends Repository
         $queryResult = $queryBuilder
             ->select('uid', 'pid', 'iso2', 'iso3', 'name', 'tld', 'phone_country_code')
             ->from('tx_contacts_domain_model_country')
-            ->execute()
-            ->fetchAll();
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $uids = array_column($queryResult, 'uid');
         $queryResult = array_combine($uids, $queryResult);

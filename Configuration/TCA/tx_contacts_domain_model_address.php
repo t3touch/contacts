@@ -1,6 +1,6 @@
 <?php
 
-defined('TYPO3_MODE') or die();
+defined('TYPO3') or die();
 
 $_LLL_core_general = 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf';
 $_LLL_db = 'LLL:EXT:contacts/Resources/Private/Language/locallang_db.xlf';
@@ -14,7 +14,6 @@ return [
         'label_alt_force' => 1,
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
 
         'versioningWS' => true,
         'origUid' => 't3_origuid',
@@ -65,18 +64,7 @@ return [
         'sys_language_uid' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'sys_language',
-                'foreign_table_where' => 'ORDER BY sys_language.title',
-                'items' => [
-                    ['LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages', -1],
-                    ['LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.default_value', 0]
-                ],
-                'eval' => 'int',
-                'default' => 0,
-            ],
+            'config' => ['type' => 'language'],
         ],
         'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
@@ -85,7 +73,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tx_contacts_domain_model_address',
                 'foreign_table_where' => 'AND tx_contacts_domain_model_address.pid=###CURRENT_PID### AND tx_contacts_domain_model_address.sys_language_uid IN (-1,0)',
@@ -109,22 +97,15 @@ return [
             'label' => $_LLL_core_general . ':LGL.hidden',
             'config' => [
                 'type' => 'check',
-                'renderType' => 'checkboxToggle',
-                'items' => [
-                    '1' => [
-                        '0' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:hidden.I.0'
-                    ]
-                ]
+                'renderType' => 'checkboxToggle'
             ],
         ],
         'starttime' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
+                'type' => 'datetime',
                 'size' => 13,
-                'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
@@ -136,10 +117,8 @@ return [
             'exclude' => 1,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
+                'type' => 'datetime',
                 'size' => 13,
-                'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
@@ -184,28 +163,28 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        $_LLL_db . ':tx_contacts_domain_model_address.type.DOM',
-                        'DOM'
+                        'label' => $_LLL_db . ':tx_contacts_domain_model_address.type.DOM',
+                        'value' => 'DOM'
                     ],
                     [
-                        $_LLL_db . ':tx_contacts_domain_model_address.type.INTL',
-                        'INTL'
+                        'label' => $_LLL_db . ':tx_contacts_domain_model_address.type.INTL',
+                        'value' => 'INTL'
                     ],
                     [
-                        $_LLL_db . ':tx_contacts_domain_model_address.type.POSTAL',
-                        'POSTAL'
+                        'label' => $_LLL_db . ':tx_contacts_domain_model_address.type.POSTAL',
+                        'value' => 'POSTAL'
                     ],
                     [
-                        $_LLL_db . ':tx_contacts_domain_model_address.type.PARCEL',
-                        'PARCEL'
+                        'label' => $_LLL_db . ':tx_contacts_domain_model_address.type.PARCEL',
+                        'value' => 'PARCEL'
                     ],
                     [
-                        $_LLL_db . ':tx_contacts_domain_model_address.type.HOME',
-                        'HOME'
+                        'label' => $_LLL_db . ':tx_contacts_domain_model_address.type.HOME',
+                        'value' => 'HOME'
                     ],
                     [
-                        $_LLL_db . ':tx_contacts_domain_model_address.type.WORK',
-                        'WORK'
+                        'label' => $_LLL_db . ':tx_contacts_domain_model_address.type.WORK',
+                        'value' => 'WORK'
                     ],
                 ],
                 'size' => 5,
@@ -340,7 +319,6 @@ return [
                 'appearance' => [
                     'levelLinksPosition' => 'top',
                     'showPossibleLocalizationRecords' => true,
-                    'showRemovedLocalizationRecords' => true,
                     'showAllLocalizationLink' => true,
                     'showSynchronizationLink' => true,
                     'enabledControls' => [

@@ -38,10 +38,10 @@
                     <f:translate key="tx_contacts_domain_model_phone.type.{phoneNumber.type}"/>: {phoneNumber.number}<br>
                 </f:for>
                 <f:if condition="{address.contact.email}">
-                    <f:translate key="tx_contacts_domain_model_company.email"/>: <f:link.email email="{address.company.email}" /><br>
+                    <f:translate key="tx_contacts_domain_model_company.email"/>: <f:link.email email="{address.contact.email}" /><br>
                 </f:if>
                 <f:if condition="{address.contact.uri}">
-                    <f:translate key="tx_contacts_domain_model_company.uri"/>: <f:link.external uri="{address.company.uri}" target="_blank">{address.company.uri}</f:link.external>
+                    <f:translate key="tx_contacts_domain_model_company.uri"/>: <f:link.external uri="{address.contact.uri}" target="_blank">{address.company.uri}</f:link.external>
                 </f:if>
             </p>
         </f:if>

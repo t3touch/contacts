@@ -17,12 +17,7 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 class CompanyRepository extends Repository
 {
 
-    /**
-     * @param Demand $demand
-     *
-     * @return QueryResultInterface|array
-     */
-    public function findDemanded(Demand $demand)
+    public function findDemanded(Demand $demand): QueryResultInterface|array
     {
         // settings
         $query = $this->createQuery();
@@ -38,23 +33,23 @@ class CompanyRepository extends Repository
 
             if ($demand->getSelectedCategory()) {
                 $category = $demand->getSelectedCategory();
-                $categoryConstraints[] = $query->contains('category', $category);
-                $categoryConstraints[] = $query->contains('categories', $category);
+                $categoryConstraints[] = $query->equals('category', $category);
+                $categoryConstraints[] = $query->equals('categories', $category);
             } else {
                 foreach ($demand->getAvailableCategories() as $category) {
-                    $categoryConstraints[] = $query->contains('category', $category);
-                    $categoryConstraints[] = $query->contains('categories', $category);
+                    $categoryConstraints[] = $query->equals('category', $category);
+                    $categoryConstraints[] = $query->equals('categories', $category);
                 }
             }
 
-            $constraints = $query->logicalOr($categoryConstraints);
+            $constraints[] = $query->logicalOr(...$categoryConstraints);
         }
 
         // create constraint
         if (!empty($constraints)) {
             $query->matching(
                 $query->logicalAnd(
-                    $query->logicalOr($constraints)
+                    $query->logicalOr(...$constraints)
                 )
             );
         }

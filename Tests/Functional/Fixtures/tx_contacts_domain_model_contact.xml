@@ -18,7 +18,6 @@
         <description>''</description>
         <meta_description>''</meta_description>
     </tx_contacts_domain_model_contact>
-
     <tx_contacts_domain_model_contact>
         <uid>3</uid>
         <pid>3</pid>
@@ -37,7 +36,6 @@
         <description>''</description>
         <meta_description>''</meta_description>
     </tx_contacts_domain_model_contact>
-
     <tx_contacts_domain_model_contact>
         <uid>5</uid>
         <pid>4</pid>

@@ -11,114 +11,73 @@ namespace Extcode\Contacts\Domain\Model;
 
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Annotation\Validate;
 
 class Contact extends AbstractContact
 {
-    /**
-     * @var string
-     */
-    protected $salutation = '';
+
+    protected string $salutation = '';
+
+    protected string $title = '';
+
+    #[Validate(['validator' => 'NotEmpty'])]
+    protected string $firstName;
+
+    #[Validate(['validator' => 'NotEmpty'])]
+    protected string $lastName;
+
+    protected \DateTime $birthday;
 
     /**
-     * @var string
+     * @var ObjectStorage<Company>
      */
-    protected $title = '';
+    protected ObjectStorage $companies;
 
-    /**
-     * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
-     */
-    protected $firstName;
+    protected ?FileReference $photo;
 
-    /**
-     * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
-     */
-    protected $lastName;
-
-    /**
-     * @var \DateTime
-     */
-    protected $birthday;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Extcode\Contacts\Domain\Model\Company>
-     */
-    protected $companies;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
-     */
-    protected $photo;
-
-    /**
-     * @param string $salutation
-     * @param string $title
-     * @param string $firstName
-     * @param string $lastName
-     */
     public function __construct(
         string $salutation,
         string $title,
         string $firstName,
         string $lastName
     ) {
+        parent::__construct();
         $this->salutation = $salutation;
         $this->title = $title;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
 
-        $this->initStorageObjects();
+        $this->initializeObject();
     }
 
-    /**
-     * Initializes all ObjectStorage properties.
-     */
-    protected function initStorageObjects()
+    public function initializeObject(): void
     {
         $this->companies = new ObjectStorage();
         $this->addresses = new ObjectStorage();
         $this->phoneNumbers = new ObjectStorage();
     }
 
-    /**
-     * @param string $salutation
-     */
-    public function setSalutation(string $salutation)
+    public function setSalutation(string $salutation): void
     {
         $this->salutation = $salutation;
     }
 
-    /**
-     * @return string
-     */
-    public function getSalutation()
+    public function getSalutation(): string
     {
         return $this->salutation;
     }
 
-    /**
-     * @param string $title
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $firstName
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function setFirstName(string $firstName)
+    public function setFirstName(string $firstName): void
     {
         if (strlen($firstName) == 0) {
             throw new \InvalidArgumentException(
@@ -130,20 +89,12 @@ class Contact extends AbstractContact
         $this->firstName = $firstName;
     }
 
-    /**
-     * @return string
-     */
-    public function getFirstName()
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
 
-    /**
-     * @param string $lastName
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function setLastName(string $lastName)
+    public function setLastName(string $lastName): void
     {
         if (strlen($lastName) == 0) {
             throw new \InvalidArgumentException(
@@ -155,28 +106,17 @@ class Contact extends AbstractContact
         $this->lastName = $lastName;
     }
 
-    /**
-     * @return string
-     */
-    public function getLastName()
+    public function getLastName(): string
     {
         return $this->lastName;
     }
 
-    /**
-     * @param string $seperator
-     * @return string
-     */
-    public function getFullName(string $seperator = ' ')
+    public function getFullName(string $seperator = ' '): string
     {
         return implode($seperator, [$this->getFirstName(), $this->getLastName()]);
     }
 
-    /**
-     * @param string $seperator
-     * @return string
-     */
-    public function getTitleFullName(string $seperator = ' ')
+    public function getTitleFullName(string $seperator = ' '): string
     {
         $titleFullName = [];
         if ($this->getTitle()) {
@@ -187,18 +127,12 @@ class Contact extends AbstractContact
         return implode($seperator, $titleFullName);
     }
 
-    /**
-     * @param \DateTime $birthday
-     */
-    public function setBirthday(\DateTime $birthday)
+    public function setBirthday(\DateTime $birthday): void
     {
         $this->birthday = $birthday;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getBirthday()
+    public function getBirthday(): ?\DateTime
     {
         if ($this->birthday) {
             return $this->birthday;
@@ -207,26 +141,20 @@ class Contact extends AbstractContact
         return null;
     }
 
-    /**
-     * @param Company $company
-     */
-    public function addCompany(Company $company)
+    public function addCompany(Company $company): void
     {
-        $this->companies->attach($company);
+        $this->companies?->attach($company);
     }
 
-    /**
-     * @param Company $company
-     */
-    public function removeCompany(Company $company)
+    public function removeCompany(Company $company): void
     {
-        $this->companies->detach($company);
+        $this->companies?->detach($company);
     }
 
     /**
      * @return ObjectStorage<Company> $companies
      */
-    public function getCompanies()
+    public function getCompanies(): ObjectStorage
     {
         return $this->companies;
     }
@@ -234,23 +162,17 @@ class Contact extends AbstractContact
     /**
      * @param ObjectStorage<Company> $companies
      */
-    public function setCompanies(ObjectStorage $companies)
+    public function setCompanies(ObjectStorage $companies): void
     {
         $this->companies = $companies;
     }
 
-    /**
-     * @return FileReference
-     */
-    public function getPhoto()
+    public function getPhoto(): ?FileReference
     {
-        return $this->photo;
+        return $this->photo ?? null;
     }
 
-    /**
-     * @param FileReference $photo
-     */
-    public function setPhoto(FileReference $photo)
+    public function setPhoto(FileReference $photo): void
     {
         $this->photo = $photo;
     }

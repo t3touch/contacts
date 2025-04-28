@@ -1,72 +1,81 @@
 <?php
 
-defined('TYPO3_MODE') or die();
+use Extcode\Contacts\Controller\AddressController;
+use Extcode\Contacts\Controller\CompanyController;
+use Extcode\Contacts\Controller\ContactController;
+use Extcode\Contacts\DataHandler\EvalFloat8;
+use Extcode\Contacts\Hooks\DataHandler;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+
+defined('TYPO3') or die();
 
 $_LLL_be = 'LLL:EXT:contacts/Resources/Private/Language/locallang_be.xlf';
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+ExtensionUtility::configurePlugin(
     'Contacts',
     'Contacts',
     [
-        \Extcode\Contacts\Controller\ContactController::class => 'list, show, teaser',
+        ContactController::class => 'list, show, teaser',
     ],
     [
-        \Extcode\Contacts\Controller\ContactController::class => 'list',
+        ContactController::class => 'list',
     ]
 );
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+ExtensionUtility::configurePlugin(
     'Contacts',
     'ContactTeaser',
     [
-        \Extcode\Contacts\Controller\ContactController::class => 'teaser',
+        ContactController::class => 'teaser',
     ],
     [
-        \Extcode\Contacts\Controller\ContactController::class => '',
+        ContactController::class => '',
     ]
 );
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+ExtensionUtility::configurePlugin(
     'Contacts',
     'Companies',
     [
-        \Extcode\Contacts\Controller\CompanyController::class => 'list, show, teaser',
+        CompanyController::class => 'list, show, teaser',
     ],
     [
-        \Extcode\Contacts\Controller\CompanyController::class => 'list',
+        CompanyController::class => 'list',
     ]
 );
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+ExtensionUtility::configurePlugin(
     'Contacts',
     'CompanyTeaser',
     [
-        \Extcode\Contacts\Controller\CompanyController::class => 'teaser',
+        CompanyController::class => 'teaser',
     ],
     [
-        \Extcode\Contacts\Controller\CompanyController::class => '',
+        CompanyController::class => '',
     ]
 );
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+ExtensionUtility::configurePlugin(
     'Contacts',
     'AddressSearch',
     [
-        \Extcode\Contacts\Controller\AddressController::class => 'search',
+        AddressController::class => 'search',
     ],
     [
-        \Extcode\Contacts\Controller\AddressController::class => 'search',
+        AddressController::class => 'search',
     ]
 );
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+ExtensionUtility::configurePlugin(
     'Contacts',
     'Address',
     [
-        \Extcode\Contacts\Controller\AddressController::class => 'show',
+        AddressController::class => 'show',
     ],
     [
-        \Extcode\Contacts\Controller\AddressController::class => '',
+        AddressController::class => '',
     ]
 );
 
@@ -74,24 +83,20 @@ $_LLL_be = 'LLL:EXT:contacts/Resources/Private/Language/locallang_be.xlf';
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['contacts'][]
     = 'Extcode\\Contacts\\ViewHelpers';
 
-// update wizard for slugs
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['contactsSlugUpdater'] =
-    \Extcode\Contacts\Updates\SlugUpdater::class;
-
 // clearCachePostProc Hook
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc']['contacts_clearcache'] =
-    \Extcode\Contacts\Hooks\DataHandler::class . '->clearCachePostProc';
+    DataHandler::class . '->clearCachePostProc';
 
 // provide extension configuration for TypoScript
-$extensionConfiguration = new \TYPO3\CMS\Core\Configuration\ExtensionConfiguration();
+$extensionConfiguration = new ExtensionConfiguration();
 $contactsConfiguration = $extensionConfiguration->get('contacts');
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptConstants('plugin.tx_contacts.googleMapsApiKey=' . $contactsConfiguration['googleMapsApiKey']);
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptConstants('plugin.tx_contacts.googleMapsLibrary=' . $contactsConfiguration['googleMapsLibrary']);
+ExtensionManagementUtility::addTypoScriptConstants('plugin.tx_contacts.googleMapsApiKey=' . $contactsConfiguration['googleMapsApiKey']);
+ExtensionManagementUtility::addTypoScriptConstants('plugin.tx_contacts.googleMapsLibrary=' . $contactsConfiguration['googleMapsLibrary']);
 
 // register class to be available in 'eval' of TCA
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals'][\Extcode\Contacts\DataHandler\EvalFloat8::class] = '';
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals'][EvalFloat8::class] = '';
 
 // register layouts
 $GLOBALS['TYPO3_CONF_VARS']['EXT']['contacts']['templateLayouts']['address'][] = [$_LLL_be . ':flexforms_template.templateLayout.address.gmaps', 'gmaps'];

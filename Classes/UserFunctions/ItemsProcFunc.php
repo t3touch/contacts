@@ -1,6 +1,6 @@
 <?php
 
-namespace Extcode\Contacts\Hooks;
+namespace Extcode\Contacts\UserFunctions;
 
 /*
  * This file is part of the package extcode/contacts.
@@ -11,8 +11,8 @@ namespace Extcode\Contacts\Hooks;
 
 use Extcode\Contacts\Utility\TemplateLayout;
 use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\StringUtility;
 
 /**
  * Userfunc to render alternative label for media elements
@@ -30,14 +30,11 @@ class ItemsProcFunc
 
     /**
      * Itemsproc function to extend the selection of templateLayouts in the plugin
-     *
-     * @param array &$config configuration array
      */
-    public function user_templateLayout(array &$config)
+    public function user_templateLayout(array &$config): void
     {
-        $pageId = 0;
         $currentColPos = $config['flexParentDatabaseRow']['colPos'];
-        $pageId = $this->getPageId($config['flexParentDatabaseRow']['pid']);
+        $pageId = $this->getPageId($config['flexParentDatabaseRow']['pid']) ?? 0;
 
         $extKey = $config['config']['extKey'];
         $pluginName = $config['config']['pluginName'];
@@ -58,19 +55,15 @@ class ItemsProcFunc
 
     /**
      * Reduce the template layouts by the ones that are not allowed in given colPos
-     *
-     * @param array $templateLayouts
-     * @param int $currentColPos
-     * @return array
      */
-    protected function reduceTemplateLayouts($templateLayouts, $currentColPos)
+    protected function reduceTemplateLayouts($templateLayouts, $currentColPos): array
     {
         $currentColPos = (int)$currentColPos;
         $restrictions = [];
         $allLayouts = [];
         foreach ($templateLayouts as $key => $layout) {
             if (is_array($layout[0])) {
-                if (isset($layout[0]['allowedColPos']) && StringUtility::endsWith($layout[1], '.')) {
+                if (isset($layout[0]['allowedColPos']) && str_ends_with($layout[1], '.')) {
                     $layoutKey = substr($layout[1], 0, -1);
                     $restrictions[$layoutKey] = GeneralUtility::intExplode(',', $layout[0]['allowedColPos'], true);
                 }
@@ -91,11 +84,8 @@ class ItemsProcFunc
 
     /**
      * Get page id, if negative, then it is a "after record"
-     *
-     * @param int $pid
-     * @return int
      */
-    protected function getPageId($pid)
+    protected function getPageId($pid): int
     {
         $pid = (int)$pid;
 
@@ -107,12 +97,7 @@ class ItemsProcFunc
         return $row['pid'];
     }
 
-    /**
-     * Returns LanguageService
-     *
-     * @return \TYPO3\CMS\Core\Localization\LanguageService
-     */
-    protected function getLanguageService()
+    protected function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
     }

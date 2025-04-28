@@ -14,70 +14,30 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class GoogleMapHook
 {
-    /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-     */
-    protected $objectManager;
+    protected CountryRepository $countryRepository;
 
-    /**
-     * @var CountryRepository
-     */
-    protected $countryRepository;
+    protected array $pluginSettings = [];
 
-    /**
-     * @var array
-     */
-    protected $pluginSettings = [];
+    protected string $idPrefix = '';
 
-    /**
-     * @var string
-     */
-    protected $idPrefix = '';
+    protected string $tableName = '';
 
-    /**
-     * @var string
-     */
-    protected $tableName = '';
+    protected string $addressId = '';
 
-    /**
-     * @var string
-     */
-    protected $addressId = '';
+    protected string $latFieldName = 'lat';
 
-    /**
-     * @var string
-     */
-    protected $latFieldName = 'lat';
+    protected string $lonFieldName = 'lon';
 
-    /**
-     * @var string
-     */
-    protected $lonFieldName = 'lon';
+    protected float $latitude = 51.439310;
 
-    /**
-     * @var float
-     */
-    protected $latitude = 51.439310;
+    protected float $longitude = 9.997579;
 
-    /**
-     * @var float
-     */
-    protected $longitude = 9.997579;
-
-    /**
-     * @param array $params
-     */
-    protected function init(array $params)
+    protected function init(array $params): void
     {
-        $this->objectManager = new ObjectManager();
-
-        $this->countryRepository = $this->objectManager->get(
-            CountryRepository::class
-        );
+        $this->countryRepository = GeneralUtility::makeInstance(CountryRepository::class);
 
         $querySettings = $this->countryRepository->createQuery()->getQuerySettings();
         $querySettings->setRespectStoragePage(false);
@@ -93,16 +53,8 @@ class GoogleMapHook
 
     /**
      * Renders the Google map.
-     *
-     * @param array $params
-     * @param $fObj
-     *
-     * @return string
-     *
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException
      */
-    public function render(array $params, $fObj)
+    public function render(array $params, $fObj): string
     {
         $this->init($params);
 
@@ -119,11 +71,6 @@ class GoogleMapHook
         return $out;
     }
 
-    /**
-     * @param array $params
-     *
-     * @return string
-     */
     protected function concatenateFieldsToAddress(array $params): string
     {
         $address = [];
@@ -152,14 +99,9 @@ class GoogleMapHook
         return $addressString;
     }
 
-    /**
-     * @param int $countryId
-     *
-     * @return string
-     */
     protected function retrieveCountryCode(int $countryId): string
     {
-        $country = $this->countryRepository->findOneByUid($countryId);
+        $country = $this->countryRepository->findOneBy(['uid' => $countryId]);
 
         if ($country) {
             $countryCode = $country->getIso2();
@@ -170,11 +112,6 @@ class GoogleMapHook
         return '';
     }
 
-    /**
-     * @param string $googleMapsLibrary
-     *
-     * @return string
-     */
     protected function getJavaScript(string $googleMapsLibrary): string
     {
         $version = VersionNumberUtility::convertVersionNumberToInteger(GeneralUtility::makeInstance(Typo3Version::class)->getVersion());
@@ -197,11 +134,6 @@ class GoogleMapHook
         return $out;
     }
 
-    /**
-     * @param array $params
-     *
-     * @return string
-     */
     protected function getInputFields(array $params): string
     {
         $address = $this->concatenateFieldsToAddress($params);
@@ -220,10 +152,7 @@ class GoogleMapHook
         return $out;
     }
 
-    /**
-     * @param array $params
-     */
-    protected function setLatLon(array $params)
+    protected function setLatLon(array $params): void
     {
         $latitude = (float)$params['row'][$this->latFieldName];
         $longitude = (float)$params['row'][$this->lonFieldName];
@@ -234,10 +163,7 @@ class GoogleMapHook
         }
     }
 
-    /**
-     * @param array $params
-     */
-    protected function setLatLonFieldNames(array $params)
+    protected function setLatLonFieldNames(array $params): void
     {
         $dataPrefix = 'data[' . $this->tableName . '][' . $params['row']['uid'] . ']';
         if ($params['parameters']['latitude']) {

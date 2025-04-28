@@ -11,112 +11,65 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
  */
 
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 class Address extends AbstractEntity
 {
-    /**
-     * @var string
-     */
-    protected $title = '';
+    protected string $title = '';
+
+    protected string $type = 'INTL,POSTAL,PARCEL,WORK';
+
+    protected string $street = '';
+
+    protected string $streetNumber = '';
+
+    protected string $addition1 = '';
+
+    protected string $addition2 = '';
+
+    protected string $zip = '';
+
+    protected string $city = '';
+
+    protected string $region = '';
+
+    protected ?Country $country;
+
+    protected string $postBox = '';
+
+    protected string $lat = '';
 
     /**
-     * @var string
+     * @var ObjectStorage<TtContent>
      */
-    protected $type = 'INTL,POSTAL,PARCEL,WORK';
+    #[Lazy]
+    protected ObjectStorage $ttContent;
 
-    /**
-     * @var string
-     */
-    protected $street = '';
+    protected ?Contact  $contact;
 
-    /**
-     * @var string
-     */
-    protected $streetNumber = '';
+    protected ?Company $company;
 
-    /**
-     * @var string
-     */
-    protected $addition1 = '';
+    public function __construct()
+    {
+        $this->initializeObject();
+    }
 
-    /**
-     * @var string
-     */
-    protected $addition2 = '';
+    public function initializeObject(): void
+    {
+        $this->ttContent = new ObjectStorage();
+    }
 
-    /**
-     * @var string
-     */
-    protected $zip = '';
-
-    /**
-     * @var string
-     */
-    protected $city = '';
-
-    /**
-     * @var string
-     */
-    protected $region = '';
-
-    /**
-     * @var \Extcode\Contacts\Domain\Model\Country
-     */
-    protected $country = '';
-
-    /**
-     * @var string
-     */
-    protected $postBox = '';
-
-    /**
-     * @var string
-     */
-    protected $lon = '';
-
-    /**
-     * @var string
-     */
-    protected $lat = '';
-
-    /**
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Extcode\Contacts\Domain\Model\TtContent>
-     */
-    protected $ttContent;
-
-    /**
-     * @var \Extcode\Contacts\Domain\Model\Contact
-     */
-    protected $contact = null;
-
-    /**
-     * @var \Extcode\Contacts\Domain\Model\Company
-     */
-    protected $company = null;
-
-    /**
-     * @param string $title
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $type
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $types = ['DOM', 'INTL', 'POSTAL', 'PARCEL', 'HOME', 'WORK'];
 
@@ -130,218 +83,137 @@ class Address extends AbstractEntity
         $this->type = $type;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $street
-     */
-    public function setStreet(string $street)
+    public function setStreet(string $street): void
     {
         $this->street = $street;
     }
 
-    /**
-     * @return string
-     */
-    public function getStreet()
+    public function getStreet(): string
     {
         return $this->street;
     }
 
-    /**
-     * @param string $streetNumber
-     */
-    public function setStreetNumber(string $streetNumber)
+    public function setStreetNumber(string $streetNumber): void
     {
         $this->streetNumber = $streetNumber;
     }
 
-    /**
-     * @return string
-     */
-    public function getStreetNumber()
+    public function getStreetNumber(): string
     {
         return $this->streetNumber;
     }
 
-    /**
-     * @param string $addition1
-     */
-    public function setAddition1(string $addition1)
+    public function setAddition1(string $addition1): void
     {
         $this->addition1 = $addition1;
     }
 
-    /**
-     * @return string
-     */
-    public function getAddition1()
+    public function getAddition1(): string
     {
         return $this->addition1;
     }
 
-    /**
-     * @param string $addition2
-     */
-    public function setAddition2(string $addition2)
+    public function setAddition2(string $addition2): void
     {
         $this->addition2 = $addition2;
     }
 
-    /**
-     * @return string
-     */
-    public function getAddition2()
+    public function getAddition2(): string
     {
         return $this->addition2;
     }
 
-    /**
-     * @param string $zip
-     */
-    public function setZip(string $zip)
+    public function setZip(string $zip): void
     {
         $this->zip = $zip;
     }
 
-    /**
-     * @return string
-     */
-    public function getZip()
+    public function getZip(): string
     {
         return $this->zip;
     }
 
-    /**
-     * @param string $city
-     */
-    public function setCity(string $city)
+    public function setCity(string $city): void
     {
         $this->city = $city;
     }
 
-    /**
-     * @return string
-     */
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }
 
-    /**
-     * @param string $region
-     */
-    public function setRegion(string $region)
+    public function setRegion(string $region): void
     {
         $this->region = $region;
     }
 
-    /**
-     * @return string
-     */
-    public function getRegion()
+    public function getRegion(): string
     {
         return $this->region;
     }
 
-    /**
-     * @param Country $country
-     */
-    public function setCountry(Country $country)
+    public function setCountry(Country $country): void
     {
         $this->country = $country;
     }
 
-    /**
-     * @return Country
-     */
-    public function getCountry()
+    public function getCountry(): ?Country
     {
-        return $this->country;
+        return $this->country ?? null;
     }
 
-    /**
-     * @param string $postBox
-     */
-    public function setPostBox(string $postBox)
+    public function setPostBox(string $postBox): void
     {
         $this->postBox = $postBox;
     }
 
-    /**
-     * @return string
-     */
-    public function getPostBox()
+    public function getPostBox(): string
     {
         return $this->postBox;
     }
 
-    /**
-     * @param string $lat
-     */
-    public function setLat(string $lat)
+    public function setLat(string $lat): void
     {
         $this->lat = $lat;
     }
 
-    /**
-     * @return string
-     */
-    public function getLat()
+    public function getLat(): string
     {
         return $this->lat;
     }
 
-    /**
-     * @param string $lon
-     */
-    public function setLon(string $lon)
+    public function setLon(string $lon): void
     {
         $this->lon = $lon;
     }
 
-    /**
-     * @return string
-     */
-    public function getLon()
+    public function getLon(): ?float
     {
-        return $this->lon;
+        return $this->lon ?? null;
     }
 
-    /**
-     * @param Contact $contact
-     */
-    public function setContact(Contact $contact)
+    public function setContact(Contact $contact): void
     {
         $this->contact = $contact;
     }
 
-    /**
-     * @return Contact
-     */
-    public function getContact()
+    public function getContact(): ?Contact
     {
-        return $this->contact;
+        return $this->contact ?? null;
     }
 
-    /**
-     * @return Company
-     */
-    public function getCompany()
+    public function getCompany(): ?Company
     {
-        return $this->company;
+        return $this->company ?? null;
     }
 
-    /**
-     * @param Company $company
-     */
-    public function setCompany($company)
+    public function setCompany($company): void
     {
         $this->company = $company;
     }
@@ -349,7 +221,7 @@ class Address extends AbstractEntity
     /**
      * @param ObjectStorage $ttContent
      */
-    public function setTtContent(ObjectStorage $ttContent)
+    public function setTtContent(ObjectStorage $ttContent): void
     {
         $this->ttContent = $ttContent;
     }
@@ -357,7 +229,7 @@ class Address extends AbstractEntity
     /**
      * @return ObjectStorage
      */
-    public function getTtContent()
+    public function getTtContent(): ObjectStorage
     {
         return $this->ttContent;
     }

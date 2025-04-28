@@ -31,9 +31,6 @@ class MetaTagViewHelper extends AbstractViewHelper
      */
     protected $tagName = 'meta';
 
-    /**
-     * Arguments initialization
-     */
     public function initializeArguments()
     {
         $this->registerArgument(

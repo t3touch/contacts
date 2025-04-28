@@ -5,9 +5,10 @@
     <div class="contacts_module_search_inner">
 
         <f:form action="{action}" name="filter" id="contacts_module_search">
-            <f:form.textfield property="searchString" id="searchString" value="{demand.searchString}"/>
+            <f:form.textfield property="searchString" id="searchString" value="{demand.searchString}" class="form-control mt-2 form-control-sm search-input"/>
 
-            <f:form.submit value="{f:translate(key: 'tx_contacts.module.action.filter')}" class="btn btn-default"/>
+            <f:form.submit value="{f:translate(key: 'tx_contacts.module.action.filter')}" class="btn btn-sm mt-2 mb-4 btn-default"/>
+
         </f:form>
 
     </div>

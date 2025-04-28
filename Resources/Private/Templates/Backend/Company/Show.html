@@ -1,13 +1,14 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
-<f:layout name="Default"/>
+<f:layout name="Module"/>
 
 <f:section name="actions">
-    <f:render partial="Contact/Show/Actions"/>
 </f:section>
 
-<f:section name="content">
+<f:section name="Content">
+    <f:render partial="Backend/Contact/Show/Actions"/>
+
     <h1>
         <f:translate key="tx_contacts.module.companyController.showAction.header"/>
     </h1>
@@ -51,30 +52,30 @@
 
             <f:if condition="{company.contacts}">
                 <h3><f:translate key="tx_contacts_domain_model_company.contacts"/></h3>
-                <f:render partial="Contact/List/Table" arguments="{contacts: company.contacts}"/>
+                <f:render partial="Backend/Contact/List/Table" arguments="{contacts: company.contacts}"/>
             </f:if>
 
             <f:if condition="{company.directors}">
                 <h3><f:translate key="tx_contacts_domain_model_company.directors"/></h3>
-                <f:render partial="Contact/List/Table" arguments="{contacts: company.directors}"/>
+                <f:render partial="Backend/Contact/List/Table" arguments="{contacts: company.directors}"/>
             </f:if>
 
             <f:if condition="{company.companies}">
                 <h3><f:translate key="tx_contacts_domain_model_company.companies"/></h3>
-                <f:render partial="Company/List/Table" arguments="{companies: company.companies}"/>
+                <f:render partial="Backend/Company/List/Table" arguments="{companies: company.companies}"/>
             </f:if>
 
             <f:if condition="{company.addresses}">
                 <h3><f:translate key="tx_contacts_domain_model_company.addresses"/></h3>
                 <f:for each="{company.addresses}" as="address">
-                    <f:render partial="Address/Show" arguments="{_all}"/>
+                    <f:render partial="Backend/Address/Show" arguments="{_all}"/>
                 </f:for>
             </f:if>
 
             <f:if condition="{company.phoneNumbers}">
                 <h3><f:translate key="tx_contacts_domain_model_company.phone_numbers"/></h3>
                 <f:for each="{company.phoneNumbers}" as="phoneNumber">
-                    <f:render partial="Phone/Show" arguments="{_all}"/>
+                    <f:render partial="Backend/Phone/Show" arguments="{_all}"/>
                 </f:for>
             </f:if>
 

@@ -2,7 +2,7 @@
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-defined('TYPO3_MODE') or die();
+defined('TYPO3') or die();
 
 $_LLL_core_general = 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf';
 $_LLL_db = 'LLL:EXT:contacts/Resources/Private/Language/locallang_db.xlf';
@@ -14,7 +14,6 @@ return [
         'label' => 'name',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
 
         'versioningWS' => true,
         'origUid' => 't3_origuid',
@@ -71,18 +70,7 @@ return [
         'sys_language_uid' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'sys_language',
-                'foreign_table_where' => 'ORDER BY sys_language.title',
-                'items' => [
-                    ['LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages', -1],
-                    ['LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.default_value', 0]
-                ],
-                'eval' => 'int',
-                'default' => 0,
-            ],
+            'config' => ['type' => 'language'],
         ],
         'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
@@ -91,7 +79,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tx_contacts_domain_model_company',
                 'foreign_table_where' => 'AND tx_contacts_domain_model_company.pid=###CURRENT_PID### AND tx_contacts_domain_model_company.sys_language_uid IN (-1,0)',
@@ -115,22 +103,15 @@ return [
             'label' => $_LLL_core_general . ':LGL.hidden',
             'config' => [
                 'type' => 'check',
-                'renderType' => 'checkboxToggle',
-                'items' => [
-                    '1' => [
-                        '0' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:hidden.I.0'
-                    ]
-                ]
+                'renderType' => 'checkboxToggle'
             ],
         ],
         'starttime' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
+                'type' => 'datetime',
                 'size' => 13,
-                'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
@@ -142,10 +123,8 @@ return [
             'exclude' => 1,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
+                'type' => 'datetime',
                 'size' => 13,
-                'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
@@ -164,7 +143,7 @@ return [
                 'foreign_table' => 'fe_users',
                 'size' => 1,
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
                 'minitems' => 0,
                 'maxitems' => 1,
@@ -179,7 +158,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required'
+                'eval' => 'trim',
+                'required' => true
             ],
         ],
         'legal_name' => [
@@ -261,7 +241,6 @@ return [
             'label' => $_LLL_db . ':tx_contacts_domain_model_company.directors',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'foreign_table' => 'tx_contacts_domain_model_contact',
                 'allowed' => 'tx_contacts_domain_model_contact',
                 'MM' => 'tx_contacts_domain_model_company_director_mm',
@@ -284,7 +263,6 @@ return [
             'label' => $_LLL_db . ':tx_contacts_domain_model_company.contacts',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'foreign_table' => 'tx_contacts_domain_model_contact',
                 'allowed' => 'tx_contacts_domain_model_contact',
                 'MM' => 'tx_contacts_domain_model_contact_company_mm',
@@ -307,7 +285,6 @@ return [
             'label' => $_LLL_db . ':tx_contacts_domain_model_company.companies',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'foreign_table' => 'tx_contacts_domain_model_company',
                 'allowed' => 'tx_contacts_domain_model_company',
                 'MM' => 'tx_contacts_domain_model_company_company_mm',
@@ -372,23 +349,38 @@ return [
             'exclude' => 1,
             'label' => $_LLL_db . ':tx_contacts_domain_model_company.uri',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputLink',
+                'type' => 'link',
                 'size' => 30,
-                'max' => 256,
-                'eval' => 'trim',
-                'softref' => 'typolink',
-                'fieldControl' => ['linkPopup' => ['options' => ['title' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:header_link_formlabel', 'blindLinkOptions' => 'mail,folder']]]
+                'allowedTypes' => ['page', 'file', 'url', 'record', 'telephone'],
+                'appearance' => ['browserTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:header_link_formlabel']
             ],
         ],
         'logo' => [
             'exclude' => 1,
             'label' => $_LLL_db . ':tx_contacts_domain_model_company.logo',
-            'config' => ExtensionManagementUtility::getFileFieldTCAConfig(
-                'Logo',
-                ['maxitems' => 1],
-                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
-            ),
+            'config' => [
+                'type' => 'file',
+                'allowed' => 'common-image-types',
+                'maxitems' => 1,
+                'minitems' => 0,
+                'appearance' => [
+                    'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
+                ],
+                'overrideChildTca' => [
+                    'types' => [
+                        '0' => [
+                            'showitem' => '
+                                --palette--;LLL:EXT:file/Resources/Private/Language/locallang.xlf:fileimageoverlayPalette;imageoverlayPalette,
+                                --palette--;;filePalette'
+                        ],
+                        \TYPO3\CMS\Core\Resource\FileType::IMAGE->value => [
+                            'showitem' => '
+                                --palette--;LLL:EXT:file/Resources/Private/Language/locallang.xlf:fileimageoverlayPalette;imageoverlayPalette,
+                                --palette--;;filePalette'
+                        ]
+                    ]
+                ]
+            ]
         ],
 
         'teaser' => [
@@ -432,7 +424,6 @@ return [
                 'appearance' => [
                     'levelLinksPosition' => 'top',
                     'showPossibleLocalizationRecords' => true,
-                    'showRemovedLocalizationRecords' => true,
                     'showAllLocalizationLink' => true,
                     'showSynchronizationLink' => true,
                     'enabledControls' => [

@@ -11,30 +11,26 @@ namespace Extcode\Contacts\Controller;
 
 use Extcode\Contacts\Domain\Model\Contact;
 use Extcode\Contacts\Domain\Repository\ContactRepository;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Extcode\Contacts\Controller\ActionController as ContactsActionController;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
-class ContactController extends ActionController
+class ContactController extends ContactsActionController
 {
-    /**
-     * @var ContactRepository
-     */
-    protected $contactRepository;
 
     /**
      * @var int
      */
     protected $pageId;
 
-    public function injectContactRepository(ContactRepository $contactRepository): void
-    {
-        $this->contactRepository = $contactRepository;
-    }
+    public function __construct(protected ContactRepository $contactRepository)
+    {}
 
     protected function initializeAction(): void
     {
         if ($GLOBALS['TSFE'] === null) {
-            $this->pageId = (int)GeneralUtility::_GP('id');
+            $this->pageId = (int)($this->request->getParsedBody()['id'] ?? $this->request->getQueryParams()['id'] ?? null);
         } else {
             $this->pageId = $GLOBALS['TSFE']->id;
         }
@@ -52,7 +48,7 @@ class ContactController extends ActionController
         if (!empty($GLOBALS['TSFE']) && is_object($GLOBALS['TSFE'])) {
             static $cacheTagsSet = false;
 
-            /** @var $typoScriptFrontendController \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController */
+            /** @var $typoScriptFrontendController TypoScriptFrontendController */
             $typoScriptFrontendController = $GLOBALS['TSFE'];
             if (!$cacheTagsSet) {
                 $typoScriptFrontendController->addCacheTags(['tx_contacts']);
@@ -61,7 +57,7 @@ class ContactController extends ActionController
         }
     }
 
-    public function listAction(): void
+    public function listAction(): ResponseInterface
     {
         $demand = $this->createDemandObjectFromSettings($this->settings);
         $demand->setActionAndClass(__METHOD__, __CLASS__);
@@ -71,9 +67,10 @@ class ContactController extends ActionController
         $this->view->assign('demand', $demand);
         $this->view->assign('contacts', $contacts);
         $this->view->assign('categories', $this->getSelectedCategories($demand));
+        return $this->htmlResponse();
     }
 
-    public function showAction(Contact $contact = null): void
+    public function showAction(Contact $contact = null): ResponseInterface
     {
         if (!$contact && (int)$this->settings['contact']) {
             $contact = $this->contactRepository->findByUid((int)$this->settings['contact']);
@@ -82,14 +79,16 @@ class ContactController extends ActionController
         $this->view->assign('contact', $contact);
 
         $this->addCacheTags([$contact]);
+        return $this->htmlResponse();
     }
 
-    public function teaserAction(): void
+    public function teaserAction(): ResponseInterface
     {
         $contacts = $this->contactRepository->findByUids($this->settings['contactUids']);
         $this->view->assign('contacts', $contacts);
 
         $this->addCacheTags($contacts);
+        return $this->htmlResponse();
     }
 
     protected function addCacheTags(array $contacts): void

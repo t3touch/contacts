@@ -16,30 +16,19 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
-    /**
-     * @var CategoryRepository
-     */
-    protected $categoryRepository;
 
-    /**
-     * @var \TYPO3\CMS\Core\Domain\Repository\PageRepository
-     */
-    protected $pageRepository;
 
-    /**
-     * @param CategoryRepository $categoryRepository
-     */
-    public function injectCategoryRepository(CategoryRepository $categoryRepository)
-    {
-        $this->categoryRepository = $categoryRepository;
-    }
+    protected CategoryRepository $categoryRepository;
+    protected PageRepository $pageRepository;
 
-    /**
-     * @param \TYPO3\CMS\Core\Domain\Repository\PageRepository $pageRepository
-     */
     public function injectPageRepository(PageRepository $pageRepository)
     {
         $this->pageRepository = $pageRepository;
+    }
+
+    public function injectCategoryRepository(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -80,7 +69,7 @@ class ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     /**
      * @param Demand $demand
      */
-    protected function addCategoriesToDemandObjectFromSettings(&$demand)
+    protected function addCategoriesToDemandObjectFromSettings(&$demand): void
     {
         if ($this->settings['categoriesList']) {
             $selectedCategories = GeneralUtility::intExplode(

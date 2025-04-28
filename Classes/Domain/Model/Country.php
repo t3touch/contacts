@@ -4,6 +4,7 @@ namespace Extcode\Contacts\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Property\Exception;
+use TYPO3\CMS\Extbase\Annotation\Validate;
 
 /*
  * This file is part of the package extcode/contacts.
@@ -13,41 +14,21 @@ use TYPO3\CMS\Extbase\Property\Exception;
  */
 class Country extends AbstractEntity
 {
-    /**
-     * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
-     */
-    protected $iso2 = '';
+    #[Validate(['validator' => 'NotEmpty'])]
+    protected string $iso2 = '';
 
-    /**
-     * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
-     */
-    protected $iso3 = '';
+    #[Validate(['validator' => 'NotEmpty'])]
+    protected string $iso3 = '';
 
-    /**
-     * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
-     */
-    protected $name = '';
+    #[Validate(['validator' => 'NotEmpty'])]
+    protected string $name = '';
 
-    /**
-     * @var string
-     */
-    protected $tld = '';
+    protected string $tld = '';
 
-    /**
-     * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
-     */
-    protected $phoneCountryCode = '';
+    #[Validate(['validator' => 'NotEmpty'])]
+    protected string $phoneCountryCode = '';
 
-    /**
-     * @param string $iso2
-     *
-     * @throws \TYPO3\CMS\Extbase\Property\Exception
-     */
-    public function setIso2(string $iso2)
+    public function setIso2(string $iso2): void
     {
         if (strlen($iso2) != 2) {
             throw new Exception(
@@ -59,20 +40,12 @@ class Country extends AbstractEntity
         $this->iso2 = $iso2;
     }
 
-    /**
-     * @return string
-     */
-    public function getIso2()
+    public function getIso2(): string
     {
         return $this->iso2;
     }
 
-    /**
-     * @param string $iso3
-     *
-     * @throws \TYPO3\CMS\Extbase\Property\Exception
-     */
-    public function setIso3(string $iso3)
+    public function setIso3(string $iso3): void
     {
         if ((strlen($iso3) != 0) and (strlen($iso3) != 3)) {
             throw new Exception(
@@ -84,58 +57,37 @@ class Country extends AbstractEntity
         $this->iso3 = $iso3;
     }
 
-    /**
-     * @return string
-     */
-    public function getIso3()
+    public function getIso3(): string
     {
         return $this->iso3;
     }
 
-    /**
-     * @param string $name
-     */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $tld
-     */
-    public function setTld(string $tld)
+    public function setTld(string $tld): void
     {
         $this->tld = $tld;
     }
 
-    /**
-     * @return string
-     */
-    public function getTld()
+    public function getTld(): string
     {
         return $this->tld;
     }
 
-    /**
-     * @param string $phoneCountryCode
-     */
-    public function setPhoneCountryCode(string $phoneCountryCode)
+    public function setPhoneCountryCode(string $phoneCountryCode): void
     {
         $this->phoneCountryCode = $phoneCountryCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getPhoneCountryCode()
+    public function getPhoneCountryCode(): string
     {
         return $this->phoneCountryCode;
     }

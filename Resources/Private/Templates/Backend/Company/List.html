@@ -1,0 +1,25 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:layout name="Module"/>
+
+
+<f:section name="Content">
+    <f:render partial="Backend/Company/List/Actions"/>
+
+    <f:if condition="{paginator.paginatedItems}">
+        <f:then>
+            <f:render partial="Backend/Company/List/Filter" arguments="{demand: demand, action: 'list'}"/>
+
+            <div class="clear"></div>
+
+            <f:render partial="Backend/Company/List/Table" arguments="{companies: paginator.paginatedItems}"/>
+            <f:render partial="Backend/Utility/Paginator" arguments="{pagination: pagination, pages: pages, paginator: paginator}" />
+        </f:then>
+        <f:else>
+            Select a Page where Company Dataset are saved.
+        </f:else>
+    </f:if>
+</f:section>
+</html>

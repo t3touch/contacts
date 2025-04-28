@@ -11,87 +11,62 @@ namespace Extcode\Contacts\Domain\Model;
 
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Annotation\Validate;
 
 class Company extends AbstractContact
 {
-    /**
-     * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate("NotEmpty")
-     */
-    protected $name;
+
+    #[Validate(['validator' => 'NotEmpty'])]
+    protected string $name;
+
+    protected string $legalName = '';
+
+    protected string $legalForm = '';
+
+    protected string $registeredOffice = '';
+
+    protected string $registerCourt = '';
+
+    protected string $registerNumber = '';
+
+    protected string $vatId = '';
 
     /**
-     * @var string
+     * @var ObjectStorage<Contact>
      */
-    protected $legalName = '';
+    protected ObjectStorage $directors;
 
     /**
-     * @var string
+     * @var ObjectStorage<Contact>
      */
-    protected $legalForm = '';
+    protected ObjectStorage $contacts;
 
     /**
-     * @var string
+     * @var ObjectStorage<Company>
      */
-    protected $registeredOffice = '';
+    protected ObjectStorage $companies;
 
-    /**
-     * @var string
-     */
-    protected $registerCourt = '';
+    protected ?FileReference $logo;
 
-    /**
-     * @var string
-     */
-    protected $registerNumber = '';
-
-    /**
-     * @var string
-     */
-    protected $vatId = '';
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Extcode\Contacts\Domain\Model\Contact>
-     */
-    protected $directors;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Extcode\Contacts\Domain\Model\Contact>
-     */
-    protected $contacts;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Extcode\Contacts\Domain\Model\Company>
-     */
-    protected $companies;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
-     */
-    protected $logo = null;
-
-    /**
-     * @param string $name
-     */
     public function __construct(string $name)
     {
+        parent::__construct();
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function initializeObject(): void
+    {
+        $this->directors = new ObjectStorage();
+        $this->contacts = new ObjectStorage();
+        $this->companies = new ObjectStorage();
+    }
+
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         if (strlen($name) == 0) {
             throw new \InvalidArgumentException(
@@ -103,122 +78,80 @@ class Company extends AbstractContact
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function getLegalName()
+    public function getLegalName(): string
     {
         return $this->legalName;
     }
 
-    /**
-     * @param string $legalName
-     */
-    public function setLegalName(string $legalName)
+    public function setLegalName(string $legalName): void
     {
         $this->legalName = $legalName;
     }
 
-    /**
-     * @return string
-     */
-    public function getLegalForm()
+    public function getLegalForm(): string
     {
         return $this->legalForm;
     }
 
-    /**
-     * @param string $legalForm
-     */
-    public function setLegalForm(string $legalForm)
+    public function setLegalForm(string $legalForm): void
     {
         $this->legalForm = $legalForm;
     }
 
-    /**
-     * @return string
-     */
-    public function getRegisteredOffice()
+    public function getRegisteredOffice(): string
     {
         return $this->registeredOffice;
     }
 
-    /**
-     * @param string $registeredOffice
-     */
-    public function setRegisteredOffice(string $registeredOffice)
+    public function setRegisteredOffice(string $registeredOffice): void
     {
         $this->registeredOffice = $registeredOffice;
     }
 
-    /**
-     * @return string
-     */
-    public function getRegisterCourt()
+    public function getRegisterCourt(): string
     {
         return $this->registerCourt;
     }
 
-    /**
-     * @param string $registerCourt
-     */
-    public function setRegisterCourt(string $registerCourt)
+    public function setRegisterCourt(string $registerCourt): void
     {
         $this->registerCourt = $registerCourt;
     }
 
-    /**
-     * @return string
-     */
-    public function getRegisterNumber()
+    public function getRegisterNumber(): string
     {
         return $this->registerNumber;
     }
 
-    /**
-     * @param string $registerNumber
-     */
-    public function setRegisterNumber(string $registerNumber)
+    public function setRegisterNumber(string $registerNumber): void
     {
         $this->registerNumber = $registerNumber;
     }
 
-    /**
-     * @return string
-     */
-    public function getVatId()
+    public function getVatId(): string
     {
         return $this->vatId;
     }
 
-    /**
-     * @param string $vatId
-     */
-    public function setVatId(string $vatId)
+    public function setVatId(string $vatId): void
     {
         $this->vatId = $vatId;
     }
 
-    /**
-     * @param Contact $director
-     */
-    public function addDirector(Contact $director)
+    public function addDirector(Contact $director): void
     {
-        $this->directors->attach($director);
+        $this->directors?->attach($director);
     }
 
-    /**
-     * @param Contact $director
-     */
-    public function removeDirector(Contact $director)
+    public function removeDirector(Contact $director): void
     {
-        $this->directors->detach($director);
+        $this->directors?->detach($director);
     }
 
     /**
      * @return ObjectStorage<Contact>
      */
-    public function getDirectors()
+    public function getDirectors(): ObjectStorage
     {
         return $this->directors;
     }
@@ -226,31 +159,25 @@ class Company extends AbstractContact
     /**
      * @param ObjectStorage<Contact> $directors
      */
-    public function setDirectors($directors)
+    public function setDirectors($directors): void
     {
         $this->directors = $directors;
     }
 
-    /**
-     * @param Contact $contact
-     */
-    public function addContact(Contact $contact)
+    public function addContact(Contact $contact): void
     {
-        $this->contacts->attach($contact);
+        $this->contacts?->attach($contact);
     }
 
-    /**
-     * @param Contact $contact
-     */
-    public function removeContact(Contact $contact)
+    public function removeContact(Contact $contact): void
     {
-        $this->contacts->detach($contact);
+        $this->contacts?->detach($contact);
     }
 
     /**
      * @return ObjectStorage<Contact> $contacts
      */
-    public function getContacts()
+    public function getContacts(): ObjectStorage
     {
         return $this->contacts;
     }
@@ -258,31 +185,25 @@ class Company extends AbstractContact
     /**
      * @param ObjectStorage<Contact> $contacts
      */
-    public function setContacts(ObjectStorage $contacts)
+    public function setContacts(ObjectStorage $contacts): void
     {
         $this->contacts = $contacts;
     }
 
-    /**
-     * @param Company $company
-     */
-    public function addCompany(self $company)
+    public function addCompany(self $company): void
     {
-        $this->companies->attach($company);
+        $this->companies?->attach($company);
     }
 
-    /**
-     * @param Company $company
-     */
-    public function removeCompany(self $company)
+    public function removeCompany(self $company): void
     {
-        $this->companies->detach($company);
+        $this->companies?->detach($company);
     }
 
     /**
      * @return ObjectStorage<Company> $companies
      */
-    public function getCompanies()
+    public function getCompanies(): ObjectStorage
     {
         return $this->companies;
     }
@@ -290,23 +211,17 @@ class Company extends AbstractContact
     /**
      * @param ObjectStorage<Company> $companies
      */
-    public function setCompanies(ObjectStorage $companies)
+    public function setCompanies(ObjectStorage $companies): void
     {
         $this->companies = $companies;
     }
 
-    /**
-     * @return FileReference
-     */
-    public function getLogo()
+    public function getLogo(): ?FileReference
     {
-        return $this->logo;
+        return $this->logo ?? null;
     }
 
-    /**
-     * @param FileReference $logo
-     */
-    public function setLogo(FileReference $logo)
+    public function setLogo(FileReference $logo): void
     {
         $this->logo = $logo;
     }

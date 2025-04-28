@@ -44,8 +44,8 @@ plugin.tx_contacts {
             saturation = -30
             lightness = 30
 
-            companyMarker = EXT:contacts/Resources/Public/Icons/tx_contacts_domain_model_address.png
-            contactMarker = EXT:contacts/Resources/Public/Icons/tx_contacts_domain_model_address.png
+            companyMarker = EXT:contacts/Resources/Public/Icons/tx_contacts_domain_model_address.svg
+            contactMarker = EXT:contacts/Resources/Public/Icons/tx_contacts_domain_model_address.svg
         }
 
         radius {

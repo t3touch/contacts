@@ -1,109 +1,94 @@
+<?xml version="1.0"?>
 <T3DataStructure>
     <sheets>
         <sDEF>
             <ROOT>
-                <TCEforms>
-                    <sheetTitle>Optionen</sheetTitle>
-                </TCEforms>
+                <sheetTitle>Optionen</sheetTitle>
                 <type>array</type>
                 <el>
                     <switchableControllerActions>
-                        <TCEforms>
-                            <label>Standardaktion des Plugins</label>
-                            <onChange>reload</onChange>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectSingle</renderType>
-                                <items>
-                                    <numIndex index="0">
-                                        <numIndex index="0">
-                                            LLL:EXT:contacts/Resources/Private/Language/locallang_db.xlf:tx_contacts.plugin.contactController.listAction.title
-                                        </numIndex>
-                                        <numIndex index="1">Contact->list;Contact->show</numIndex>
-                                    </numIndex>
-                                    <numIndex index="1">
-                                        <numIndex index="0">
-                                            LLL:EXT:contacts/Resources/Private/Language/locallang_db.xlf:tx_contacts.plugin.contactController.teaserAction.title
-                                        </numIndex>
-                                        <numIndex index="1">Contact->teaser</numIndex>
-                                    </numIndex>
-                                </items>
-                            </config>
-                        </TCEforms>
-                    </switchableControllerActions>
-                    
-                    <settings.orderBy>
-                        <TCEforms>
-                            <label>LLL:EXT:contacts/Resources/Private/Language/locallang_be.xlf:tx_contacts.plugin.contacts.action.contact.list.orderBy</label>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectSingle</renderType>
-                                <items>
-                                    <numIndex index="0" type="array">
-                                        <numIndex index="0">
-                                        </numIndex>
-                                        <numIndex index="1">
-                                        </numIndex>
-                                    </numIndex>
-                                    <numIndex index="2">
-                                        <numIndex index="0">LLL:EXT:contacts/Resources/Private/Language/locallang_be.xlf:tx_contacts.plugin.contacts.action.contact.list.orderBy.last_name</numIndex>
-                                        <numIndex index="1">last_name</numIndex>
-                                    </numIndex>
-                                </items>
-                            </config>
-                        </TCEforms>
-                    </settings.orderBy>
-                    
-                    <settings.contactUids>
-                        <TCEforms>
-                            <label>LLL:EXT:contacts/Resources/Private/Language/locallang_db.xlf:tx_contacts_domain_model_contact</label>
-                            <displayCond>FIELD:switchableControllerActions:=:Contact->teaser</displayCond>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectMultipleSideBySide</renderType>
-                                <foreign_table>tx_contacts_domain_model_contact</foreign_table>
-                                <foreign_table_where>AND (tx_contacts_domain_model_contact.sys_language_uid=CAST('###REC_FIELD_sys_language_uid###' AS UNSIGNED) OR tx_contacts_domain_model_contact.sys_language_uid = '-1') AND tx_contacts_domain_model_contact.deleted = 0 AND tx_contacts_domain_model_contact.hidden = 0</foreign_table_where>
-                                <size>3</size>
-                                <minitems>1</minitems>
-                                <maxitems>99</maxitems>
-                            </config>
-                        </TCEforms>
-                    </settings.contactUids>
-                    
-                    <settings.categoriesList>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:contacts/Resources/Private/Language/locallang_be.xlf:tx_contacts.plugin.contacts.action.contact.list.categories</label>
-                            <displayCond>FIELD:switchableControllerActions:=:Contact->list;Contact->show</displayCond>
-                            <config>
-                                <type>select</type>
-                                <autoSizeMax>50</autoSizeMax>
-                                <foreign_table>sys_category</foreign_table>
-                                <foreign_table_where>AND sys_category.sys_language_uid IN (-1, 0) ORDER BY sys_category.title ASC
-                            </foreign_table_where>
-                            <maxitems>99</maxitems>
-                            <renderMode>tree</renderMode>
-                            <renderType>selectTree</renderType>
-                            <size>10</size>
-                            <treeConfig>
-                                <appearance>
-                                    <expandAll>1</expandAll>
-                                    <showHeader>1</showHeader>
-                                </appearance>
-                                <parentField>parent</parentField>
-                            </treeConfig>
-                        </config>
-                    </TCEforms>
-                </settings.categoriesList>
-                
-                <settings.listSubcategories>
-                    <TCEforms>
-                        <label>LLL:EXT:contacts/Resources/Private/Language/locallang_be.xlf:tx_contacts.plugin.contacts.action.contact.list.subcategories</label>
-                        <displayCond>FIELD:switchableControllerActions:=:Contact->list;Contact->show</displayCond>
+                        <label>Standardaktion des Plugins</label>
+                        <onChange>reload</onChange>
                         <config>
-                            <type>check</type>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items>
+                                <numIndex index="0">
+                                    <label>
+                                        LLL:EXT:contacts/Resources/Private/Language/locallang_db.xlf:tx_contacts.plugin.contactController.listAction.title
+                                    </label>
+                                    <value>Contact-&gt;list;Contact-&gt;show</value>
+                                </numIndex>
+                                <numIndex index="1">
+                                    <label>
+                                        LLL:EXT:contacts/Resources/Private/Language/locallang_db.xlf:tx_contacts.plugin.contactController.teaserAction.title
+                                    </label>
+                                    <value>Contact-&gt;teaser</value>
+                                </numIndex>
+                            </items>
                         </config>
-                    </TCEforms>
+                    </switchableControllerActions>
+                    <settings.orderBy>
+                        <label>LLL:EXT:contacts/Resources/Private/Language/locallang_be.xlf:tx_contacts.plugin.contacts.action.contact.list.orderBy</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items>
+                                <numIndex index="0" type="array">
+                                    <label>
+                                    </label>
+                                    <value>
+                                    </value>
+                                </numIndex>
+                                <numIndex index="2">
+                                    <label>LLL:EXT:contacts/Resources/Private/Language/locallang_be.xlf:tx_contacts.plugin.contacts.action.contact.list.orderBy.last_name</label>
+                                    <value>last_name</value>
+                                </numIndex>
+                            </items>
+                        </config>
+                    </settings.orderBy>
+                    <settings.contactUids>
+                        <label>LLL:EXT:contacts/Resources/Private/Language/locallang_db.xlf:tx_contacts_domain_model_contact</label>
+                        <displayCond>FIELD:switchableControllerActions:=:Contact-&gt;teaser</displayCond>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectMultipleSideBySide</renderType>
+                            <foreign_table>tx_contacts_domain_model_contact</foreign_table>
+                            <foreign_table_where>AND (tx_contacts_domain_model_contact.sys_language_uid=CAST('###REC_FIELD_sys_language_uid###' AS UNSIGNED) OR tx_contacts_domain_model_contact.sys_language_uid = '-1') AND tx_contacts_domain_model_contact.deleted = 0 AND tx_contacts_domain_model_contact.hidden = 0</foreign_table_where>
+                            <size>3</size>
+                            <minitems>1</minitems>
+                            <maxitems>99</maxitems>
+                        </config>
+                    </settings.contactUids>
+                    <settings.categoriesList>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:contacts/Resources/Private/Language/locallang_be.xlf:tx_contacts.plugin.contacts.action.contact.list.categories</label>
+                        <displayCond>FIELD:switchableControllerActions:=:Contact-&gt;list;Contact-&gt;show</displayCond>
+                        <config>
+                            <type>select</type>
+                            <autoSizeMax>50</autoSizeMax>
+                            <foreign_table>sys_category</foreign_table>
+                            <foreign_table_where>AND sys_category.sys_language_uid IN (-1, 0) ORDER BY sys_category.title ASC
+                        </foreign_table_where>
+                        <maxitems>99</maxitems>
+                        <renderMode>tree</renderMode>
+                        <renderType>selectTree</renderType>
+                        <size>10</size>
+                        <treeConfig>
+                            <appearance>
+                                <expandAll>1</expandAll>
+                                <showHeader>1</showHeader>
+                            </appearance>
+                            <parentField>parent</parentField>
+                        </treeConfig>
+                    </config>
+                </settings.categoriesList>
+                <settings.listSubcategories>
+                    <label>LLL:EXT:contacts/Resources/Private/Language/locallang_be.xlf:tx_contacts.plugin.contacts.action.contact.list.subcategories</label>
+                    <displayCond>FIELD:switchableControllerActions:=:Contact-&gt;list;Contact-&gt;show</displayCond>
+                    <config>
+                        <type>check</type>
+                    </config>
                 </settings.listSubcategories>
             </el>
         </ROOT>

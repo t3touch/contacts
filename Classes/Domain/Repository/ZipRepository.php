@@ -13,9 +13,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ZipRepository
 {
-    /**
-     * @var array
-     */
     protected $zipMap = [];
 
     protected function includeZipMap(string $zipMapFile): void

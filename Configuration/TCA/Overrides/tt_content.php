@@ -4,7 +4,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
-defined('TYPO3_MODE') or die();
+defined('TYPO3') or die();
 
 call_user_func(function () {
     $_LLL_db = 'LLL:' . 'EXT:contacts/Resources/Private/Language/locallang_db.xlf';
@@ -18,12 +18,14 @@ call_user_func(function () {
         'ContactTeaser',
     ];
 
+
     foreach ($pluginNames as $pluginName) {
         $pluginSignature = 'contacts_' . strtolower($pluginName);
         ExtensionUtility::registerPlugin(
             'Contacts',
             $pluginName,
-            $_LLL_db . ':tx_contacts.plugin.' . lcfirst($pluginName)
+            $_LLL_db . ':tx_contacts.plugin.' . lcfirst($pluginName),
+            'module-contacts',
         );
         $flexFormPath = 'EXT:contacts/Configuration/FlexForms/' . $pluginName . 'Plugin.xml';
         if (file_exists(GeneralUtility::getFileAbsFileName($flexFormPath))) {

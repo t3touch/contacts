@@ -18,10 +18,8 @@ class DataHandler
     /**
      * Flushes the cache if a news record was edited.
      * This happens on two levels: by UID and by PID.
-     *
-     * @param array $params
      */
-    public function clearCachePostProc(array $params)
+    public function clearCachePostProc(array $params): void
     {
         if (($params['table'] !== 'tx_contacts_domain_model_contact') &&
             ($params['table'] !== 'tx_contacts_domain_model_company')
@@ -37,10 +35,6 @@ class DataHandler
         }
     }
 
-    /**
-     * @param array $params
-     * @return array
-     */
     protected function getCacheTagsToFlush(array $params): array
     {
         $cachePrefix = 'tx_contacts_';

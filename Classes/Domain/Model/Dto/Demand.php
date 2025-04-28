@@ -11,36 +11,17 @@ namespace Extcode\Contacts\Domain\Model\Dto;
 
 class Demand
 {
+    protected string $searchString = '';
 
-    /**
-     * @var string
-     */
-    protected $searchString = '';
+    protected array $availableCategories = [];
 
-    /**
-     * @var array
-     */
-    protected $availableCategories = [];
+    protected int $selectedCategory = 0;
 
-    /**
-     * @var int
-     */
-    protected $selectedCategory = 0;
+    protected string $action = '';
 
-    /**
-     * @var string
-     */
-    protected $action = '';
+    protected string $class = '';
 
-    /**
-     * @var string
-     */
-    protected $class = '';
-
-    /**
-     * @var string
-     */
-    protected $orderBy = '';
+    protected string $orderBy = '';
 
     public function getSearchString(): string
     {
